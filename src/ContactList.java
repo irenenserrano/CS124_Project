@@ -1,42 +1,97 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ContactList {
-    // big concept: we have a single table compromised of a set number of slots that will hold
-    // individual LinkedLists
-    // The LinkLists will be comprised of individual nodes that hold a Map with a designated
-    // Key:Value pair
-    // the single table will be our Contact List, and the individual LinkedLists will be a chain of
-    // Contacts, that
-    // hold Names(Key) and Numbers(Value)
-    // | | | | | | | | | | - Contact List
-    // 0 0 0 0 0 0 0 0 0 - The beginning of every LinkLists will have an empty node// EMPTY PLACEHOLDER IS OPTIONAL
-    // - - C - C C - - - - all other subsequent node will be a Hash Node C
-    // - - C - C - - - -
-    // - - C - - - - - -
-    // in order to figure out what position a newly made Contact should belong to, we will need a
-    // hashValue function
-    // in order to insert a newly made contact, we need to get the hashValue, determine if there is
-    // an existing LL,
-    // check the LL to see if there is already a Contact with the same info, and then insert
-    // accordingly
-    // in order to find a contact, we will need to retrieve the hashValue, using the same method
-    // that creates the
-    // hashValue, which will give us the Contact List index that the Contact is saved in. Then we
-    // check each node
-    // in the LL that is associated with the Contact List index and return the Contact
-    // in order to remove a contact, we will need to retrieve the hashValue, using the same method
-    // that creates the
-    // hashValue, which will give us the Contact List index and then "erase" the node
-
-    private static int HASH_TABLE_SIZE = 19;
-    private static HashMap<String, Contact>[] HASH_TABLE;
+    private static int HASH_TABLE_SIZE = 0;
     private static HashMap<String, Contact> CONTACT_LIST;
-    //    private ContactNode startNode;
 
     public ContactList() {
-        HASH_TABLE = new HashMap[HASH_TABLE_SIZE];
         CONTACT_LIST = new HashMap<String, Contact>();
     }
 
+    // run time: O(1)
+    public boolean insert(String name, String number) {
+        // create a new contact
+        Contact contact = new Contact(name, number);
+        // place contact
+        CONTACT_LIST.put(name, contact);
+        // update count
+        HASH_TABLE_SIZE++;
+
+        return true;
+    }
+
+    // run time: O(N)
+    public String find(String nameORnumber) {
+        if (isNumeric(nameORnumber)) {
+            for (int i = 0; i < size(); i++) {
+                if (CONTACT_LIST.get(i).getNumber().equals(nameORnumber))
+                    return CONTACT_LIST.get(i).toString();
+            }
+        } else {
+            for (String s : CONTACT_LIST.keySet()) {
+                if (s.equalsIgnoreCase(nameORnumber))
+                    return CONTACT_LIST.get(s).toString();
+            }
+        }
+
+        return "No contact found";
+    }
+
+    // run time: O(N)
+    public boolean delete(String nameORnumber) {
+        if (isNumeric(nameORnumber)) {
+            for (int i = 0; i < size(); i++) {
+                if (CONTACT_LIST.get(i).getNumber().equals(nameORnumber)) {
+                    CONTACT_LIST.remove(i);
+                    HASH_TABLE_SIZE--;
+                    return true;
+                }
+            }
+        } else {
+            for (String s : CONTACT_LIST.keySet()) {
+                if (s.equalsIgnoreCase(nameORnumber)) {
+                    CONTACT_LIST.remove(s);
+                    HASH_TABLE_SIZE--;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // run time: O(1)
+    public int size() {
+        return HASH_TABLE_SIZE;
+    }
+
+    // run time: O(N log N)
+    public void printAllContacts() {
+        ArrayList<String> sortedContacts = new ArrayList<>(CONTACT_LIST.keySet());
+        Collections.sort(sortedContacts);
+        for (String s : sortedContacts) {
+            CONTACT_LIST.get(s).toString();
+        }
+    }
+
+    // run time: O(N)
+    public void searchAllContacts(String target) {
+        ArrayList<String> sortedContacts = new ArrayList<>(CONTACT_LIST.keySet());
+        Collections.sort(sortedContacts);
+        for (String s : sortedContacts) {
+            if (s.equals(target))
+                CONTACT_LIST.get(s).toString();
+        }
+    }
+
+    private static boolean isNumeric(String strNum) {
+        try {
+            long number = Long.parseLong(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
+    }
 }
 

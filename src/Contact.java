@@ -45,4 +45,14 @@ public class Contact {
     public String getNumber() {
         return number;
     }
+
+    public String modifyNumber(String number) {
+        return String.valueOf(number).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)-$2-$3");
+
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + " Number: " + modifyNumber(this.number);
+    }
 }
