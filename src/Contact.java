@@ -53,6 +53,6 @@ public class Contact {
 
     @Override
     public String toString() {
-        return "Name: " + name + " Number: " + modifyNumber(this.number);
+        return "Name: " + name + "\nNumber: " + modifyNumber(this.number);
     }
 }

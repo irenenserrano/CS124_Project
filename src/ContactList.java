@@ -3,11 +3,11 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class ContactList {
-    private static int HASH_TABLE_SIZE = 0;
-    private static HashMap<String, Contact> CONTACT_LIST;
+    private static int hashTableSize = 0;
+    private static HashMap<String, Contact> contactList;
 
     public ContactList() {
-        CONTACT_LIST = new HashMap<String, Contact>();
+        contactList = new HashMap<String, Contact>();
     }
 
     // run time: O(1)
@@ -15,9 +15,9 @@ public class ContactList {
         // create a new contact
         Contact contact = new Contact(name, number);
         // place contact
-        CONTACT_LIST.put(name, contact);
+        contactList.put(name, contact);
         // update count
-        HASH_TABLE_SIZE++;
+        hashTableSize++;
 
         return true;
     }
@@ -25,14 +25,14 @@ public class ContactList {
     // run time: O(N)
     public String find(String nameORnumber) {
         if (isNumeric(nameORnumber)) {
-            for (int i = 0; i < size(); i++) {
-                if (CONTACT_LIST.get(i).getNumber().equals(nameORnumber))
-                    return CONTACT_LIST.get(i).toString();
+            for (String s : contactList.keySet()) {
+                if (contactList.get(s).getNumber().equals(nameORnumber))
+                    return contactList.get(s).toString();
             }
         } else {
-            for (String s : CONTACT_LIST.keySet()) {
+            for (String s : contactList.keySet()) {
                 if (s.equalsIgnoreCase(nameORnumber))
-                    return CONTACT_LIST.get(s).toString();
+                    return contactList.get(s).toString();
             }
         }
 
@@ -42,18 +42,18 @@ public class ContactList {
     // run time: O(N)
     public boolean delete(String nameORnumber) {
         if (isNumeric(nameORnumber)) {
-            for (int i = 0; i < size(); i++) {
-                if (CONTACT_LIST.get(i).getNumber().equals(nameORnumber)) {
-                    CONTACT_LIST.remove(i);
-                    HASH_TABLE_SIZE--;
+            for (String s : contactList.keySet()) {
+                if (contactList.get(s).getNumber().equals(nameORnumber)) {
+                    contactList.remove(s);
+                    hashTableSize--;
                     return true;
                 }
             }
         } else {
-            for (String s : CONTACT_LIST.keySet()) {
+            for (String s : contactList.keySet()) {
                 if (s.equalsIgnoreCase(nameORnumber)) {
-                    CONTACT_LIST.remove(s);
-                    HASH_TABLE_SIZE--;
+                    contactList.remove(s);
+                    hashTableSize--;
                     return true;
                 }
             }
@@ -63,25 +63,25 @@ public class ContactList {
 
     // run time: O(1)
     public int size() {
-        return HASH_TABLE_SIZE;
+        return hashTableSize;
     }
 
     // run time: O(N log N)
     public void printAllContacts() {
-        ArrayList<String> sortedContacts = new ArrayList<>(CONTACT_LIST.keySet());
+        ArrayList<String> sortedContacts = new ArrayList<>(contactList.keySet());
         Collections.sort(sortedContacts);
         for (String s : sortedContacts) {
-            CONTACT_LIST.get(s).toString();
+            System.out.println(contactList.get(s).toString());
         }
     }
 
     // run time: O(N)
     public void searchAllContacts(String target) {
-        ArrayList<String> sortedContacts = new ArrayList<>(CONTACT_LIST.keySet());
+        ArrayList<String> sortedContacts = new ArrayList<>(contactList.keySet());
         Collections.sort(sortedContacts);
         for (String s : sortedContacts) {
-            if (s.equals(target))
-                CONTACT_LIST.get(s).toString();
+            if (s.equalsIgnoreCase(target))
+                System.out.println(contactList.get(s).toString());
         }
     }
 
