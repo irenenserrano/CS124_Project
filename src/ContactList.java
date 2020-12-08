@@ -11,54 +11,10 @@ public class ContactList {
     }
 
     // run time: O(1)
-    public boolean insert(String name, String number) {
-        // create a new contact
-        Contact contact = new Contact(name, number);
-        // place contact
-        contactList.put(name, contact);
-        // update count
-        hashTableSize++;
-
-        return true;
-    }
-
-    // run time: O(N)
     public String find(String nameORnumber) {
-        if (isNumeric(nameORnumber)) {
-            for (String s : contactList.keySet()) {
-                if (contactList.get(s).getNumber().equals(nameORnumber))
-                    return contactList.get(s).toString();
-            }
-        } else {
-            for (String s : contactList.keySet()) {
-                if (s.equalsIgnoreCase(nameORnumber))
-                    return contactList.get(s).toString();
-            }
-        }
-
-        return "No contact found";
-    }
-
-    // run time: O(N)
-    public boolean delete(String nameORnumber) {
-        if (isNumeric(nameORnumber)) {
-            for (String s : contactList.keySet()) {
-                if (contactList.get(s).getNumber().equals(nameORnumber)) {
-                    contactList.remove(s);
-                    hashTableSize--;
-                    return true;
-                }
-            }
-        } else {
-            for (String s : contactList.keySet()) {
-                if (s.equalsIgnoreCase(nameORnumber)) {
-                    contactList.remove(s);
-                    hashTableSize--;
-                    return true;
-                }
-            }
-        }
-        return false;
+        if (contactList.containsKey(nameORnumber))
+            return contactList.get(nameORnumber).toString();
+        return "Contact not found";
     }
 
     // run time: O(1)
@@ -71,7 +27,8 @@ public class ContactList {
         ArrayList<String> sortedContacts = new ArrayList<>(contactList.keySet());
         Collections.sort(sortedContacts);
         for (String s : sortedContacts) {
-            System.out.println(contactList.get(s).toString());
+            if(!isNumeric(s))
+                System.out.println(contactList.get(s).toString());
         }
     }
 
@@ -80,7 +37,7 @@ public class ContactList {
         ArrayList<String> sortedContacts = new ArrayList<>(contactList.keySet());
         Collections.sort(sortedContacts);
         for (String s : sortedContacts) {
-            if (s.equalsIgnoreCase(target))
+            if (s.contains(target))
                 System.out.println(contactList.get(s).toString());
         }
     }
