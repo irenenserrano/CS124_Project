@@ -9,49 +9,36 @@ public class ContactList {
     public ContactList() {
         contactList = new HashMap<String, Contact>();
     }
-    
-    public void insert(String name, String number) // no duplicates
-	{
-		//create new contact every time you 
-		//want to insert a person into the hash-map
-		Contact object = new Contact();
-		
-		contactList.put(number, object );
-		contactList.put(name, object );
-	}
-	
-	public void delete(String nameORnumber)
-	{//constant time
-		//string is a number
-		if(isNumeric(nameORnumber)==true)
-		{//ex: 5103954770	
-			//contains value return true or false
-			if (contactList.containsValue(nameORnumber)==true)
-			{//the number is in the list 
-				
-				contactList.remove(nameORnumber);
-			}
-			else
-			{
-				System.out.println("The number is not in the list.");
-			}
 
-		}
-		//string is a name 
-		if(isNumeric(nameORnumber)==false)
-		{
-			 
-			if(contactList.containsKey(nameORnumber)==true)
-			{
-				//you need to remove it entirely
-				contactList.remove(nameORnumber);
-			}
-		}
-		else
-		{
-			System.out.print("This contact does not exist.");
-		}	
-	}
+    // run time: O(1)
+    public boolean insert(String name, String number) // no duplicates
+    {
+        // create new contact every time you
+        // want to insert a person into the hash-map
+        Contact object = new Contact(name, number);
+
+        contactList.put(number, object);
+        contactList.put(name, object);
+
+        hashTableSize++;
+        return true;
+    }
+
+    // run time: O(1)
+    public boolean delete(String nameORnumber) {
+        if(contactList.containsKey(nameORnumber)) {// checking if item exists
+            if (isNumeric(nameORnumber)) { // deleting other instance before search instance
+                contactList.remove(contactList.get(nameORnumber).getName());
+            }else {
+                contactList.remove(contactList.get(nameORnumber).getNumber());
+            }
+            contactList.remove(nameORnumber); // deleting search instance
+            hashTableSize--;
+            return true;
+        }
+
+        return false;
+    }
 
     // run time: O(1)
     public String find(String nameORnumber) {
@@ -70,12 +57,12 @@ public class ContactList {
         ArrayList<String> sortedContacts = new ArrayList<>(contactList.keySet());
         Collections.sort(sortedContacts);
         for (String s : sortedContacts) {
-            if(!isNumeric(s))
+            if (!isNumeric(s))
                 System.out.println(contactList.get(s).toString());
         }
     }
 
-    // run time: O(N)
+    // run time: O(N log N)
     public void searchAllContacts(String target) {
         ArrayList<String> sortedContacts = new ArrayList<>(contactList.keySet());
         Collections.sort(sortedContacts);
@@ -93,9 +80,8 @@ public class ContactList {
         }
         return true;
     }
-    
-    
-    
- 
+
+
+
 }
 
