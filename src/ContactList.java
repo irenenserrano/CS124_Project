@@ -1,12 +1,13 @@
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class ContactList {
-    private static int hashTableSize = 19; // initial size of table
+    private static int hashTableSize = 3; // initial size of table
     private static ContactNode[] hashTable; // hash table
     private static int numContacts;// contact counter
+    private static int numContactNodes;
 
     private class ContactNode<String, Contact> {
         public String key;
@@ -29,13 +30,14 @@ public class ContactList {
     public ContactList() {
         hashTable = new ContactNode[hashTableSize];
         numContacts = 0;
+        numContactNodes = 0;
         for (int i = 0; i < hashTable.length; i++)
             hashTable[i] = null;
     }
 
     private int hashValue(String s) {
-        int value = Objects.hash(s.charAt(0));
-        int index = value % hashTableSize;
+        int value = Math.abs(s.hashCode());
+        int index = value % hashTable.length;
         return index;
     }
 
@@ -47,9 +49,10 @@ public class ContactList {
                 System.out.println("Items found");
         }
     }
+
     public void printSpecificPosition(int index) {
         ContactNode<String, Contact> current = hashTable[index];
-        while(current != null) {
+        while (current != null) {
             System.out.println(current.toString());
             current = current.next;
         }
@@ -60,19 +63,19 @@ public class ContactList {
     {
         // update numContacts
         numContacts++;
-        // figure out where this cNode belongs in the hashTable
-        int index = hashValue(name.toLowerCase() + number);
-        // create a new contact, using both name and number as key
+        int index;
         String str;
+        // create a new contact, using both name and number as key
         Contact contact = new Contact(name, number);
-        System.out.println(contact);
         for (int i = 0; i < 2; i++) {
             if (i == 0)
                 str = name;
             else
                 str = number;
+            // figure out where this cNode belongs in the hashTable
+            index = hashValue(str);
             // create a new cNode
-            ContactNode<String, Contact>cNode = new ContactNode<>(str, contact);
+            ContactNode<String, Contact> cNode = new ContactNode<>(str, contact);
             // place into hashtable if empty or place at front of existing linked list
             if (hashTable[index] == null)
                 hashTable[index] = cNode;
@@ -82,9 +85,47 @@ public class ContactList {
                 // place this new node to be the next node after placeHolder
                 hashTable[index] = cNode;
             }
-
+            // keep track of the total number of nodes
+            numContactNodes++;
         }
+
+        if ((double) numContactNodes / hashTable.length >= 0.7)
+            rehash();
+
         return true;
+    }
+
+    private void rehash() {
+        // helper objects
+        ContactNode[] temp = hashTable;
+        ContactNode<String, Contact> current;
+        HashMap<String, Contact> noRepeats = new HashMap<>();
+        // reset global variables
+        hashTableSize = nextPrime(hashTableSize);
+        hashTable = new ContactNode[hashTableSize];
+        numContacts = 0;
+        numContactNodes = 0;
+        // reinitialize hashTable
+        for (int i = 0; i < hashTable.length; i++)
+            hashTable[i] = null;
+        // refill hashTable
+        for (int i = 0; i < temp.length; i++) {
+            if (temp[i] != null) {
+                current = temp[i];
+                while (current != null) {
+                    if (!noRepeats.containsValue(current.contact))
+                        insert(current.contact.getName(), current.contact.getNumber());
+                    noRepeats.put(current.key, current.contact);
+                    current = current.next;
+                }
+            }
+        }
+    }
+
+    public int nextPrime(int oldIndex) {
+        BigInteger b = new BigInteger(String.valueOf(oldIndex * 2));
+        int newIndex = Integer.parseInt(b.nextProbablePrime().toString());
+        return newIndex;
     }
 
     // run time: O(1)
@@ -103,6 +144,16 @@ public class ContactList {
         return hashTableSize;
     }
 
+    // run time: O(1)
+    public int numContactNodes() {
+        return numContactNodes;
+    }
+
+    // run time: O(1)
+    public int numContacts() {
+        return numContacts;
+    }
+
     // run time: O(N log N)
     public void printAllContacts() {
         HashMap<String, Contact> contacts = new HashMap<>();
@@ -111,7 +162,7 @@ public class ContactList {
             if (hashTable[i] != null) {
                 current = hashTable[i];
                 while (current != null) {
-                    if(!isNumeric(current.key))
+                    if (!isNumeric(current.key))
                         contacts.put(current.key, current.contact);
                     current = current.next;
                 }
@@ -119,7 +170,7 @@ public class ContactList {
         }
         ArrayList<String> sortedContacts = new ArrayList<>(contacts.keySet());
         Collections.sort(sortedContacts);
-        for(String s : sortedContacts)
+        for (String s : sortedContacts)
             System.out.println(contacts.get(s).toString());
     }
 
@@ -131,7 +182,7 @@ public class ContactList {
             if (hashTable[i] != null) {
                 current = hashTable[i];
                 while (current != null) {
-                    if(current.key.toLowerCase().contains(target.toLowerCase()))
+                    if (current.key.toLowerCase().contains(target.toLowerCase()))
                         contacts.put(current.key, current.contact);
                     current = current.next;
                 }
@@ -139,7 +190,7 @@ public class ContactList {
         }
         ArrayList<String> sortedContacts = new ArrayList<>(contacts.keySet());
         Collections.sort(sortedContacts);
-        for(String s : sortedContacts)
+        for (String s : sortedContacts)
             System.out.println(contacts.get(s).toString());
     }
 
