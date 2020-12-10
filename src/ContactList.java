@@ -127,6 +127,16 @@ public class ContactList {
         return hashTableSize;
     }
 
+    // run time: O(1)
+    public int numContactNodes() {
+        return numContactNodes;
+    }
+
+    // run time: O(1)
+    public int numContacts() {
+        return numContacts;
+    }
+
     // run time: O(N log N)
     public void printAllContacts() {
         HashMap<String, Contact> contacts = new HashMap<>();
