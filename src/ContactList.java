@@ -1,7 +1,6 @@
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class ContactList {
     private static int hashTableSize = 3; // initial size of table
@@ -82,7 +81,6 @@ public class ContactList {
         // helper objects
         ContactNode[] temp = hashTable;
         ContactNode<String, Contact> current;
-        HashMap<String, Contact> noRepeats = new HashMap<>();
         // reset global variables
         hashTableSize = nextPrime(hashTableSize);
         hashTable = new ContactNode[hashTableSize];
@@ -96,9 +94,8 @@ public class ContactList {
             if (temp[i] != null) {
                 current = temp[i];
                 while (current != null) {
-                    if (!noRepeats.containsValue(current.contact))
+                    if (!isNumeric(current.key))
                         insert(current.contact.getName(), current.contact.getNumber());
-                    noRepeats.put(current.key, current.contact);
                     current = current.next;
                 }
             }
@@ -139,42 +136,46 @@ public class ContactList {
 
     // run time: O(N log N)
     public void printAllContacts() {
-        HashMap<String, Contact> contacts = new HashMap<>();
+        ArrayList<Contact> sortedContacts = new ArrayList<>();
         ContactNode<String, Contact> current;
         for (int i = 0; i < hashTable.length; i++) {
             if (hashTable[i] != null) {
                 current = hashTable[i];
                 while (current != null) {
                     if (!isNumeric(current.key))
-                        contacts.put(current.key, current.contact);
+                        sortedContacts.add(current.contact);
                     current = current.next;
                 }
             }
         }
-        ArrayList<String> sortedContacts = new ArrayList<>(contacts.keySet());
+
         Collections.sort(sortedContacts);
-        for (String s : sortedContacts)
-            System.out.println(contacts.get(s).toString());
+        for (int i = 0; i < sortedContacts.size(); i++)
+            System.out.println(sortedContacts.get(i).toString());
     }
 
     // run time: O(N log N)
     public void searchAllContacts(String target) {
-        HashMap<String, Contact> contacts = new HashMap<>();
+        ArrayList<Contact> sortedContacts = new ArrayList<>();
         ContactNode<String, Contact> current;
         for (int i = 0; i < hashTable.length; i++) {
             if (hashTable[i] != null) {
                 current = hashTable[i];
                 while (current != null) {
                     if (current.key.toLowerCase().contains(target.toLowerCase()))
-                        contacts.put(current.key, current.contact);
+                        sortedContacts.add(current.contact);
                     current = current.next;
                 }
             }
         }
-        ArrayList<String> sortedContacts = new ArrayList<>(contacts.keySet());
-        Collections.sort(sortedContacts);
-        for (String s : sortedContacts)
-            System.out.println(contacts.get(s).toString());
+
+        if (sortedContacts.isEmpty())
+            System.out.println("No contacts found");
+        else {
+            Collections.sort(sortedContacts);
+            for (int i = 0; i < sortedContacts.size(); i++)
+                System.out.println(sortedContacts.get(i).toString());
+        }
     }
 
     private static boolean isNumeric(String strNum) {
