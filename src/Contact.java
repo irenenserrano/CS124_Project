@@ -46,14 +46,14 @@ public class Contact implements Comparable<Contact> {
         return number;
     }
 
-    public String modifyNumber(String number) {
+    public String modifyNumber() {
         return String.valueOf(number).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)-$2-$3");
 
     }
 
     @Override
     public String toString() {
-        return "Name: " + name + "\nNumber: " + modifyNumber(this.number);
+        return "Name: " + name + "\nNumber: " + modifyNumber();
     }
 
     public int compareTo(Contact otherContact) {

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class ContactList {
-    private static int hashTableSize = 3; // initial size of table
+    private static int hashTableSize = 5; // initial size of table
     private static ContactNode[] hashTable; // hash table
     private static int numContacts;// contact counter
     private static int numContactNodes;
@@ -81,7 +81,7 @@ public class ContactList {
         // helper objects
         ContactNode[] temp = hashTable;
         ContactNode<String, Contact> current;
-        // reset global variables
+        // reset global variable
         hashTableSize = nextPrime(hashTableSize);
         hashTable = new ContactNode[hashTableSize];
         numContacts = 0;
@@ -135,7 +135,7 @@ public class ContactList {
     }
 
     // run time: O(N log N)
-    public void printAllContacts() {
+    public ArrayList<Contact> printAllContacts() {
         ArrayList<Contact> sortedContacts = new ArrayList<>();
         ContactNode<String, Contact> current;
         for (int i = 0; i < hashTable.length; i++) {
@@ -152,10 +152,11 @@ public class ContactList {
         Collections.sort(sortedContacts);
         for (int i = 0; i < sortedContacts.size(); i++)
             System.out.println(sortedContacts.get(i).toString());
+        return sortedContacts;
     }
 
     // run time: O(N log N)
-    public void searchAllContacts(String target) {
+    public ArrayList<Contact> searchAllContacts(String target) {
         ArrayList<Contact> sortedContacts = new ArrayList<>();
         ContactNode<String, Contact> current;
         for (int i = 0; i < hashTable.length; i++) {
@@ -176,6 +177,7 @@ public class ContactList {
             for (int i = 0; i < sortedContacts.size(); i++)
                 System.out.println(sortedContacts.get(i).toString());
         }
+        return sortedContacts;
     }
 
     private static boolean isNumeric(String strNum) {
