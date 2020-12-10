@@ -41,23 +41,6 @@ public class ContactList {
         return index;
     }
 
-    public void checkHashTable() {
-        for (int i = 0; i < hashTable.length; i++) {
-            if (hashTable[i] == null)
-                System.out.println("Empty, as it should be");
-            else
-                System.out.println("Items found");
-        }
-    }
-
-    public void printSpecificPosition(int index) {
-        ContactNode<String, Contact> current = hashTable[index];
-        while (current != null) {
-            System.out.println(current.toString());
-            current = current.next;
-        }
-    }
-
     // run time: O(1)
     public boolean insert(String name, String number) // no duplicates
     {
@@ -142,16 +125,6 @@ public class ContactList {
     // run time: O(1)
     public int size() {
         return hashTableSize;
-    }
-
-    // run time: O(1)
-    public int numContactNodes() {
-        return numContactNodes;
-    }
-
-    // run time: O(1)
-    public int numContacts() {
-        return numContacts;
     }
 
     // run time: O(N log N)
