@@ -1,4 +1,4 @@
-public class Contact {
+public class Contact implements Comparable<Contact> {
     // big concept: we have a single table compromised of a set number of slots that will hold individual LinkedLists
     // The LinkLists will be comprised of individual nodes that hold a Map with a designated Key:Value pair
     // the single table will be our Contact List, and the individual LinkedLists will be a chain of Contacts, that
@@ -46,13 +46,19 @@ public class Contact {
         return number;
     }
 
-    public String modifyNumber(String number) {
+    public String modifyNumber() {
         return String.valueOf(number).replaceFirst("(\\d{3})(\\d{3})(\\d+)", "($1)-$2-$3");
 
     }
 
     @Override
     public String toString() {
-        return "Name: " + name + "\nNumber: " + modifyNumber(this.number);
+        return "Name: " + name + "\nNumber: " + modifyNumber();
     }
+
+    public int compareTo(Contact otherContact) {
+        return name.compareTo(otherContact.getName()) + number.compareTo(otherContact.getNumber());
+    }
+
+
 }
