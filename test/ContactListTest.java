@@ -48,6 +48,28 @@ public class ContactListTest<AnyType extends Comparable<AnyType>> {
                 makeContact("Irene", "4152231231")), contactList.printAllContacts());
     }
 
+    @Test
+    public void size_equals_CorrectSizesAfterDelete() {
+        contactList.delete("Irene");
+        assertEquals(11, contactList.size());
+        assertEquals(6, contactList.numContactNodes());
+        assertEquals(3, contactList.numContacts());
+        
+        contactList.insert("Evolet", "510-457-7760");
+        assertEquals(11, contactList.size());
+        assertEquals(8, contactList.numContactNodes());
+        assertEquals(4, contactList.numContacts());
+        
+    }
+    
+    @Test
+    public void size_equals_CorrectSizesAfterDeletePart2() {
+        contactList.delete("4151112233");
+        assertEquals(11, contactList.size());
+        assertEquals(6, contactList.numContactNodes());
+        assertEquals(3, contactList.numContacts());
+    }
+    
     private static Contact makeContact(String name, String number) {
         Contact contact = new Contact(name, number);
         return contact;
