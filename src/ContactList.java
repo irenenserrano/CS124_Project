@@ -2,8 +2,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ContactList.ContactNode;
-
 public class ContactList {
     private static int hashTableSize = 5; // initial size of table
     private static ContactNode[] hashTable; // hash table
@@ -110,105 +108,85 @@ public class ContactList {
         return newIndex;
     }
 
- // run time: O(1)
- 	public boolean delete(String nameORnumber) {
+    // run time: O(1), on average
+    public boolean delete(String nameORnumber) {
+        ContactNode<String, Contact> current;
+        ContactNode<String, Contact> prev = null;
 
- 		String str = nameORnumber;
- 		
- 		ContactNode<String, Contact> current;
- 		ContactNode<String, Contact> prev;
+        // calling the hashvalue(str) to get a possible value
+        int possibleIndex = hashValue(nameORnumber);
 
- 		// calling the hashvalue(str) to get a possible value
- 		int possibleIndex = hashValue(str);
+        if (hashTable[possibleIndex] == null)
+            return false;
+        else {
+            current = hashTable[possibleIndex];
+            while (current != null) {
+                if (current.key.equals(nameORnumber)) {
+                    // delete the node
+                    if (prev == null)
+                        hashTable[possibleIndex] = current.next;
+                    else
+                        prev.next = current.next;
+                    // decrease numContactNodes in the LinkedList
+                    numContacts--;
+                    numContactNodes--;
+                    // look for the other contactNode with same object
+                    if (isNumeric(nameORnumber))
+                        deleteOther(current.contact.getName(),
+                                hashValue(current.contact.getName()));
+                    else
+                        deleteOther(current.contact.getNumber(),
+                                hashValue(current.contact.getNumber()));
+                    return true;
+                }
+                current = current.next;
+                prev = current;
+            }
+            return false;
+        }
 
- 		// nothing in array empty
- 		if (hashTable[possibleIndex] == null)// for possible linked list that we wont be able to look inside of until
- 		{
- 			return false;
- 		} 
- 		else {
- 			
- 			current = hashTable[possibleIndex];
- 			
- 			// look into hashtable if the value is any of the keys
- 			
- 			while (current != null) 
- 			{
- 				if (hashTable[possibleIndex].key == str) 
- 				{
- 					
- 					
- 			
- 					//to look for other contact Node should come first
- 					prev = current;
- 					
- 					//decrease numContacts in the LinkedList
- 					numContacts--;
- 					
- 					//look for the other contactNode with same object
- 					
- 					if (isNumeric(str) == true)
- 					{
- 						//i would need to delete the string name with object next 
- 						delete(current.contact.getName());
- 						
- 					}
- 					
- 					return true;
- 				} 
- 				
- 				current = current.next;
- 			}//endofwhile
+    }
 
- 		}
- 		// update numContacts;
- 		numContacts--;
+    public void deleteOther(String otherKey, int otherIndex) {
+        ContactNode<String, Contact> current;
+        ContactNode<String, Contact> prev = null;
+        current = hashTable[otherIndex];
+        while (current != null) {
+            if (current.key.equals(otherKey)) {
+                // delete the node
+                if (prev == null)
+                    hashTable[otherIndex] = current.next;
+                else
+                    prev.next = current.next;
+                numContactNodes--;
+                return;
+            }
+            current = current.next;
+            prev = current;
+        }
+    }
 
- 		return false;
- 	}
-
- 	// run time: O(1)
- 	public String find(String nameORnumber) {
-
- 		String str = nameORnumber;
- 		
- 		ContactNode<String, Contact> current;
- 		ContactNode<String, Contact> prev;
- 		
- 		// look for possible index?
- 		int possibleIndex = hashValue(nameORnumber);
- 		
- 		// Isn't hashTable[possibleIndex].key an object not a string so how would this
- 		// nothing in array empty
- 		if (hashTable[possibleIndex] == null)// for possible linked list that we wont be able to look inside of until
- 		{
- 			
- 			return  str + " is not in contact list";
-
- 		} 
- 		else {
-
- 			current = hashTable[possibleIndex];
-
- 			// look into hashtable if the value is any of the keys
-
- 			while (current != null) 
- 			{
- 				if (hashTable[possibleIndex].key == str) 
- 				{
-
- 					return str + " is in contact list";
-
- 				}
- 				
- 				current = current.next;
- 				
- 			}//endofwhileloop
-
- 		}
-
- 		return "Contact not found";
- 	}
+    // run time: O(1), on average
+    public boolean find(String nameORnumber) {
+        ContactNode<String, Contact> current;
+        int possibleIndex = hashValue(nameORnumber);
+        if (hashTable[possibleIndex] == null) {
+            System.out.println("Contact not found");
+            return false;
+        } else {
+            current = hashTable[possibleIndex];
+            // look into hashtable if the value is any of the keys
+            while (current != null) {
+                if (current.key.equals(nameORnumber)) {
+                    System.out.println(current.contact.toString());
+                    return true;
+                }
+                current = current.next;
+            }
+            System.out.println("Contact not found");
+            return false;
+        }
+    }
 
     // run time: O(1)
     public int size() {
