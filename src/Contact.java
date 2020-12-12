@@ -20,11 +20,6 @@ public class Contact implements Comparable<Contact> {
     private String name;// this is the key
     private String number;// this is the value
 
-    public Contact() {
-        this.name = null;
-        this.number = null;
-    }
-
     public Contact(String name, String number) {
         this.name = name;
         this.number = number;
