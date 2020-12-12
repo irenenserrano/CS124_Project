@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import ContactList.ContactNode;
+
 public class ContactList {
     private static int hashTableSize = 3; // initial size of table
     private static ContactNode[] hashTable; // hash table
@@ -128,16 +130,105 @@ public class ContactList {
         return newIndex;
     }
 
-    // run time: O(1)
-    public boolean delete(String nameORnumber) {
-        return false;
-    }
+ // run time: O(1)
+ 	public boolean delete(String nameORnumber) {
 
-    // run time: O(1)
-    public String find(String nameORnumber) {
+ 		String str = nameORnumber;
+ 		
+ 		ContactNode<String, Contact> current;
+ 		ContactNode<String, Contact> prev;
 
-        return "Contact not found";
-    }
+ 		// calling the hashvalue(str) to get a possible value
+ 		int possibleIndex = hashValue(str);
+
+ 		// nothing in array empty
+ 		if (hashTable[possibleIndex] == null)// for possible linked list that we wont be able to look inside of until
+ 		{
+ 			return false;
+ 		} 
+ 		else {
+ 			
+ 			current = hashTable[possibleIndex];
+ 			
+ 			// look into hashtable if the value is any of the keys
+ 			
+ 			while (current != null) 
+ 			{
+ 				if (hashTable[possibleIndex].key == str) 
+ 				{
+ 					
+ 					
+ 			
+ 					//to look for other contact Node should come first
+ 					prev = current;
+ 					
+ 					//decrease numContacts in the LinkedList
+ 					numContacts--;
+ 					
+ 					//look for the other contactNode with same object
+ 					
+ 					if (isNumeric(str) == true)
+ 					{
+ 						//i would need to delete the string name with object next 
+ 						delete(current.contact.getName());
+ 						
+ 					}
+ 					
+ 					return true;
+ 				} 
+ 				
+ 				current = current.next;
+ 			}//endofwhile
+
+ 		}
+ 		// update numContacts;
+ 		numContacts--;
+
+ 		return false;
+ 	}
+
+ 	// run time: O(1)
+ 	public String find(String nameORnumber) {
+
+ 		String str = nameORnumber;
+ 		
+ 		ContactNode<String, Contact> current;
+ 		ContactNode<String, Contact> prev;
+ 		
+ 		// look for possible index?
+ 		int possibleIndex = hashValue(nameORnumber);
+ 		
+ 		// Isn't hashTable[possibleIndex].key an object not a string so how would this
+ 		// nothing in array empty
+ 		if (hashTable[possibleIndex] == null)// for possible linked list that we wont be able to look inside of until
+ 		{
+ 			
+ 			return  str + " is not in contact list";
+
+ 		} 
+ 		else {
+
+ 			current = hashTable[possibleIndex];
+
+ 			// look into hashtable if the value is any of the keys
+
+ 			while (current != null) 
+ 			{
+ 				if (hashTable[possibleIndex].key == str) 
+ 				{
+
+ 					return str + " is in contact list";
+
+ 				}
+ 				
+ 				current = current.next;
+ 				
+ 			}//endofwhileloop
+
+ 		}
+
+ 		return "Contact not found";
+ 	}
 
     // run time: O(1)
     public int size() {
