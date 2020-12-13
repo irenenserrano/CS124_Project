@@ -38,6 +38,12 @@ class ContactListTest {
     }
 
     @ParameterizedTest
+    @ArgumentsSource(findContacts.class)
+    void findContacts_true_CheckForExistingContacts(boolean expected, boolean actual) {
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
     @ArgumentsSource(searchAllContacts.class)
     void searchAllContacts_equals_ActualReturnMeetsExpected(ArrayList<Contact> expected,
             ArrayList<Contact> actual) {
@@ -70,26 +76,50 @@ class ContactListTest {
     }
 
     static class deleteContactsName implements ArgumentsProvider {
+        ContactList local = new ContactList();
+
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext arg0)
                 throws Exception {
-            contactList.insert("Isabell", "5101234556");
-            contactList.insert("Maria", "5105569987");
-            contactList.delete("Irene");
-            return Stream.of(Arguments.of(23, contactList.size()),
-                    Arguments.of(6, contactList.numContactNodes()),
-                    Arguments.of(3, contactList.numContacts()));
+            local.insert("Irene", "4152231231");
+            local.insert("Isabell", "5101234556");
+            local.insert("Maria", "5105569987");
+            local.delete("Irene");
+            return Stream.of(Arguments.of(23, local.size()),
+                    Arguments.of(4, local.numContactNodes()),
+                    Arguments.of(2, local.numContacts()));
         }
     }
 
     static class deleteContactsNumber implements ArgumentsProvider {
+        ContactList local = new ContactList();
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext arg0)
                 throws Exception {
-            contactList.delete("5101234556");
-            return Stream.of(Arguments.of(23, contactList.size()),
-                    Arguments.of(4, contactList.numContactNodes()),
-                    Arguments.of(2, contactList.numContacts()));
+            local.insert("Irene", "4152231231");
+            local.insert("Isabell", "5101234556");
+            local.insert("Maria", "5105569987");
+            local.delete("5101234556");
+            return Stream.of(Arguments.of(23, local.size()),
+                    Arguments.of(4, local.numContactNodes()),
+                    Arguments.of(2, local.numContacts()));
+        }
+    }
+
+    static class findContacts implements ArgumentsProvider {
+        ContactList local = new ContactList();
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext arg0)
+                throws Exception {
+            local.insert("Irene", "4152231231");
+            local.insert("Isabell", "5101234556");
+            local.insert("Maria", "5105569987");
+            return Stream.of(Arguments.of(true, local.find("Irene")),
+                    Arguments.of(true, local.find("5101234556")),
+                    Arguments.of(true, local.find("Maria")),
+                    Arguments.of(true, local.find("5105569987")),
+                    Arguments.of(false, local.find("Rey")));
         }
     }
 
@@ -110,7 +140,6 @@ class ContactListTest {
         @Override
         public Stream<? extends Arguments> provideArguments(ExtensionContext arg0)
                 throws Exception {
-            // TODO Auto-generated method stub
             return Stream.of(
                     Arguments.of(makeContactList(makeContact("Irene", "4152231231"),
                             makeContact("Jen", "4151112233")),
@@ -120,7 +149,7 @@ class ContactListTest {
                     Arguments.of(makeContactList(makeContact("Irene", "4152231231"),
                             makeContact("Jen", "4151112233")),
                             contactList.searchAllContacts("e")),
-                    Arguments.of(makeContactList(), contactList.searchAllContacts("M")));
+                    Arguments.of(makeContactList(), contactList.searchAllContacts("Mar")));
         }
     }
 
@@ -129,6 +158,7 @@ class ContactListTest {
         public Stream<? extends Arguments> provideArguments(ExtensionContext arg0)
                 throws Exception {
             contactList.insert("Isabell", "5101234556");
+            contactList.insert("Maria", "5105569987");
             contactList.insert("Rey", "4157752376");
             return Stream.of(Arguments.of(makeContactList(makeContact("Irene", "4152231231"),
                     makeContact("Isabell", "5101234556"), makeContact("Jen", "4151112233"),
