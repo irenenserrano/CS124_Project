@@ -1,51 +1,90 @@
 
 public class Main {
 
-	
-	
 	 public static void main(String[] args) {
-			// TODO Auto-generated method stub
-			
-			//create a map 
-			ContactList firstList = new ContactList(); 
-			
-			//Contact newContact0 = new Contact();
-			
-			//we use its given functions for insert 
-			firstList.insert("Jenn","510-134-085");
-			firstList.insert("Kim","510-334-915");
-			firstList.insert("Jim","510-931-835");
-			firstList.insert("Rudi","510-114-485");
-			firstList.insert("Hale","510-914-685");
-
-			System.out.println("Size of list: ");
-			System.out.println(firstList.size());
-			
-			
-			System.out.println("Is Kim in the list?");
-			System.out.println(firstList.find("Kim"));
-			
-			System.out.println("We want to know if the subscript ki is in the list? Is it? ");
-			System.out.println(firstList.find("Ki"));
-			System.out.println(" ");
-						
-			
-			//testing the name Hale if in list and also deleting it and looking for Hale
-			System.out.println("Is Hale in the list?");
-			System.out.println(firstList.find("Hale"));
-			System.out.println(" ");
-			System.out.println("Deleting Hale:");
-			firstList.delete("510-914-685");
-			System.out.println(" ");
-			System.out.println("Is Hale still in the list after deletion?");
-			System.out.println(firstList.find("Hale"));
-			
-			
-
-
-
-			
-
+		 ContactList tester = new ContactList();
+		 
+		 System.out.println("Testing insert() and rehash()");
+		 tester.insert("Irene","4152601231");
+		 System.out.println("Hash Table Size: "+tester.size());
+		 System.out.println("Number of Contacts: "+tester.numContacts());
+		 System.out.println("Number of ContactNodes: "+tester.numContactNodes());
+		 System.out.println();
+		 
+		 tester.insert("Jen","5103345667");
+		 System.out.println("Hash Table Size: "+tester.size());
+		 System.out.println("Number of Contacts: "+tester.numContacts());
+		 System.out.println("Number of ContactNodes: "+tester.numContactNodes());
+		 System.out.println();
+		 
+		 tester.insert("Maria", "5106678833");
+		 tester.insert("Rey", "4154680663");
+		 
+		 System.out.println("Testing find(), searchAllContacts(), printAllContacts()");
+		 System.out.println("Search for 'Irene'");
+		 tester.find("Irene");
+		 System.out.println();
+		 System.out.println("Search for '5106678833'");
+		 tester.find("5106678833");
+		 System.out.println();
+		 System.out.println("Search for 'Isabell'");
+		 tester.find("Isabell");
+		 System.out.println();
+		 System.out.println("Search for '4151234578'");
+		 tester.find("4151234578");
+		 System.out.println();
+		 System.out.println("Search All Contacts with Areacode '415'");
+		 tester.searchAllContacts("415");
+		 System.out.println();
+		 System.out.println("Search All Contacts with Areacode '510'");
+		 tester.searchAllContacts("510");
+		 System.out.println();
+		 System.out.println("Search All Contacts for 'Ma'");
+		 tester.searchAllContacts("Ma");
+		 System.out.println();
+		 System.out.println("Search All Contacts with 'E' in their name");
+		 tester.searchAllContacts("E");
+		 System.out.println();
+		 System.out.println("Print All Contacts");
+		 tester.printAllContacts();
+		 System.out.println();
+		 
+		 tester.insert("Isabell","4156879223");
+		 tester.insert("John", "5108776234");
+		 tester.insert("Doe", "5107883455");
+		 
+		 System.out.println("Testing delete() and printAllContacts()");
+		 System.out.println("ContactList Starting Out: ");
+		 tester.printAllContacts();
+		 System.out.println("Hash Table Size: "+tester.size());
+		 System.out.println("Number of Contacts: "+tester.numContacts());
+		 System.out.println("Number of ContactNodes: "+tester.numContactNodes());
+		 System.out.println();
+		 
+		 tester.delete("Isabell");
+		 System.out.println("ContactList Updated: ");
+		 tester.printAllContacts();
+		 System.out.println("Hash Table Size: "+tester.size());
+		 System.out.println("Number of Contacts: "+tester.numContacts());
+		 System.out.println("Number of ContactNodes: "+tester.numContactNodes());
+		 System.out.println();
+		 
+		 tester.delete("5108776234");
+		 tester.delete("Doe");
+		 System.out.println("ContactList Updated: ");
+		 tester.printAllContacts();
+		 System.out.println("Hash Table Size: "+tester.size());
+		 System.out.println("Number of Contacts: "+tester.numContacts());
+		 System.out.println("Number of ContactNodes: "+tester.numContactNodes());
+		 System.out.println();
+		 
+		 tester.delete("5103345667");
+		 System.out.println("ContactList Updated: ");
+		 tester.printAllContacts();
+		 System.out.println("Hash Table Size: "+tester.size());
+		 System.out.println("Number of Contacts: "+tester.numContacts());
+		 System.out.println("Number of ContactNodes: "+tester.numContactNodes());
+		 System.out.println();
 	}
 
 }
